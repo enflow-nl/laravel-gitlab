@@ -1,15 +1,14 @@
-Laravel GitLab
-==============
+# Laravel GitLab
 
-![laravel-gitlab](https://cloud.githubusercontent.com/assets/499192/7440610/e030579c-f0bf-11e4-8c78-fdf74626de2b.png)
+[![laravel-gitlab](https://cloud.githubusercontent.com/assets/499192/24038988/ed13ea72-0b03-11e7-9068-ad06ba660a72.png)](https://about.gitlab.com)
 
-Laravel [GitLab](https://gitlab.com/) is a [GitLab](https://gitlab.com/) bridge for Laravel using the [GitLab API package](https://github.com/m4tthumphrey/php-gitlab-api).
+> A [GitLab](https://github.com/m4tthumphrey/php-gitlab-api) bridge for Laravel.
 
 ```php
 // Fetch projects.
 $gitlab->api('projects')->all();
 
-// Create Issues.
+// Create issues.
 $gitlab->api('issues')->create($id, $params);
 
 // Want to use the facade?
@@ -18,19 +17,21 @@ GitLab::api('users')->show($id);
 
 [![Build Status](https://img.shields.io/travis/vinkla/laravel-gitlab/master.svg?style=flat)](https://travis-ci.org/vinkla/laravel-gitlab)
 [![StyleCI](https://styleci.io/repos/32235069/shield?style=flat)](https://styleci.io/repos/32235069)
-[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/vinkla/gitlab.svg?style=flat)](https://scrutinizer-ci.com/g/vinkla/gitlab/code-structure)
-[![Quality Score](https://img.shields.io/scrutinizer/g/vinkla/gitlab.svg?style=flat)](https://scrutinizer-ci.com/g/vinkla/gitlab)
+[![Coverage Status](https://img.shields.io/codecov/c/github/vinkla/laravel-gitlab.svg?style=flat)](https://codecov.io/github/vinkla/laravel-gitlab)
 [![Latest Version](https://img.shields.io/github/release/vinkla/gitlab.svg?style=flat)](https://github.com/vinkla/gitlab/releases)
 [![License](https://img.shields.io/packagist/l/vinkla/gitlab.svg?style=flat)](https://packagist.org/packages/vinkla/gitlab)
 
 ## Installation
-Require this package, with [Composer](https://getcomposer.org/), in the root directory of your project.
+
+Laravel GitLab is decoupled from any library sending HTTP requests (like Guzzle), instead it uses an abstraction called [HTTPlug](http://httplug.io) which provides the http layer used to send requests to exchange rate services. This gives you the flexibility to choose what HTTP client and PSR-7 implementation you want to use.
+
+Read more about the benefits of this and about what different HTTP clients you may use in the [HTTPlug documentation](http://docs.php-http.org/en/latest/httplug/users.html). Below is an example using [Guzzle 6](http://docs.guzzlephp.org/en/latest/index.html):
 
 ```bash
-$ composer require vinkla/gitlab
+$ composer require vinkla/gitlab php-http/guzzle6-adapter
 ```
 
-Add the service provider to `config/app.php` in the `providers` array.
+Add the service provider to `config/app.php` in the `providers` array, or if you're using Laravel 5.5, this can be done via the automatic package discovery.
 
 ```php
 Vinkla\GitLab\GitLabServiceProvider::class
@@ -75,6 +76,7 @@ This facade will dynamically pass static method calls to the `gitlab` object in 
 This class contains no public methods of interest. This class should be added to the providers array in `config/app.php`. This class will setup ioc bindings.
 
 ### Examples
+
 Here you can see an example of just how simple this package is to use. Out of the box, the default adapter is `main`. After you enter your authentication details in the config file, it will just work:
 
 ```php
@@ -116,25 +118,26 @@ use Vinkla\GitLab\GitLabManager;
 
 class Foo
 {
-	protected $gitlab;
-
-	public function __construct(GitLabManager $gitlab)
-	{
-		$this->gitlab = $gitlab;
-	}
-
-	public function bar()
-	{
-		$this->gitlab->api('users')->all(true);
-	}
+    protected $gitlab;
+    
+    public function __construct(GitLabManager $gitlab)
+    {
+        $this->gitlab = $gitlab;
+    }
+    
+    public function bar()
+    {
+        $this->gitlab->api('users')->all(true);
+    }
 }
 
 App::make('Foo')->bar();
 ```
 
 ## Documentation
+
 There are other classes in this package that are not documented here. This is because the package is a Laravel wrapper of [the official GitLab package](https://github.com/m4tthumphrey/php-gitlab-api).
 
 ## License
 
-Laravel GitLab is licensed under [The MIT License (MIT)](LICENSE).
+[MIT](LICENSE) © [Vincent Klaiber](https://vinkla.com)
